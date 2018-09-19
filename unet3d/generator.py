@@ -1,13 +1,18 @@
-import os
+import os, sys
 import copy
-from random import shuffle
 import itertools
+from random import shuffle
 
 import numpy as np
+sys.path.append("./utils")
 
-from .utils import pickle_dump, pickle_load
-from .utils.patches import compute_patch_indices, get_random_nd_index, get_patch_from_3d_data
-from .augment import augment_data, random_permutation_x_y
+# from .utils import pickle_dump, pickle_load
+# from .utils.patches import compute_patch_indices, get_random_nd_index, get_patch_from_3d_data
+# from .augment import augment_data, random_permutation_x_y
+
+from utils import pickle_dump, pickle_load
+from utils.patches import compute_patch_indices, get_random_nd_index, get_patch_from_3d_data
+from augment import augment_data, random_permutation_x_y
 
 
 def get_training_and_validation_generators(data_file, batch_size, n_labels, training_keys_file, validation_keys_file,
@@ -55,6 +60,14 @@ def get_training_and_validation_generators(data_file, batch_size, n_labels, trai
                                                           overwrite=overwrite,
                                                           training_file=training_keys_file,
                                                           validation_file=validation_keys_file)
+
+    # training_file = training_keys_file
+    # validation_file = validation_keys_file
+    # validation_list = [11, 9, 0, 15]
+    # training_list = [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 13, 14]
+
+    # pickle_dump(training_list, training_file)
+    # pickle_dump(validation_list, validation_file)
 
     training_generator = data_generator(data_file, training_list,
                                         batch_size=batch_size,
