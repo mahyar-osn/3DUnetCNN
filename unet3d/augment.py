@@ -1,8 +1,8 @@
 import numpy as np
 import nibabel as nib
 from nilearn.image import new_img_like, resample_to_img
-import random
 import itertools
+import random
 
 
 def scale_image(image, scale_factor):
