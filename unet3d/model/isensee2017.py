@@ -1,11 +1,17 @@
 from functools import partial
 
+import sys, os
+
 from keras.layers import Input, LeakyReLU, Add, UpSampling3D, Activation, SpatialDropout3D, Conv3D
 from keras.engine import Model
 from keras.optimizers import Adam
+#
+# from .unet import create_convolution_block, concatenate
+# from ..metrics import weighted_dice_coefficient_loss
 
-from .unet import create_convolution_block, concatenate
-from ..metrics import weighted_dice_coefficient_loss
+sys.path.append("../unet3d/model")
+from unet import create_convolution_block, concatenate
+from metrics import weighted_dice_coefficient_loss
 
 
 create_convolution_block = partial(create_convolution_block, activation=LeakyReLU, instance_normalization=True)
