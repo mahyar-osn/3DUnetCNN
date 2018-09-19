@@ -4,10 +4,15 @@ import nibabel as nib
 import numpy as np
 import tables
 
-from .training import load_old_model
-from .utils import pickle_load
-from .utils.patches import reconstruct_from_patches, get_patch_from_3d_data, compute_patch_indices
-from .augment import permute_data, generate_permutation_keys, reverse_permute_data
+#~ from .training import load_old_model
+#~ from .utils import pickle_load
+#~ from .utils.patches import reconstruct_from_patches, get_patch_from_3d_data, compute_patch_indices
+#~ from .augment import permute_data, generate_permutation_keys, reverse_permute_data
+
+from training import load_old_model
+from utils import pickle_load
+from utils.patches import reconstruct_from_patches, get_patch_from_3d_data, compute_patch_indices
+from augment import permute_data, generate_permutation_keys, reverse_permute_data
 
 
 def patch_wise_prediction(model, data, overlap=0, batch_size=1, permute=False):
@@ -62,7 +67,8 @@ def predict_and_get_image(model, data, affine):
 
 
 def predict_from_data_file_and_get_image(model, open_data_file, index):
-    return predict_and_get_image(model, open_data_file.root.data[index], open_data_file.root.affine)
+    # return predict_and_get_image(model, open_data_file.root.data[index], open_data_file.root.affine)
+    return predict_and_get_image(model, open_data_file.root.data, open_data_file.root.affine)
 
 
 def predict_from_data_file_and_write_image(model, open_data_file, index, out_file):
@@ -150,20 +156,21 @@ def run_validation_cases(validation_keys_file, model_file, training_modalities, 
             case_directory = os.path.join(output_dir, data_file.root.subject_ids[index].decode('utf-8'))
         else:
             case_directory = os.path.join(output_dir, "validation_case_{}".format(index))
+
         run_validation_case(data_index=index, output_dir=case_directory, model=model, data_file=data_file,
                             training_modalities=training_modalities, output_label_map=output_label_map, labels=labels,
                             threshold=threshold, overlap=overlap, permute=permute)
     data_file.close()
 
 
-def predict(model, data, permute=False):
+def predict(model, data, permute=False, batch=None):
     if permute:
         predictions = list()
         for batch_index in range(data.shape[0]):
             predictions.append(predict_with_permutations(model, data[batch_index]))
         return np.asarray(predictions)
     else:
-        return model.predict(data)
+        return model.predict(data, batch_size=batch)
 
 
 def predict_with_permutations(model, data):

@@ -1,15 +1,23 @@
 import math
 from functools import partial
+import tensorflow as tf
 
 from keras import backend as K
+from keras.backend.tensorflow_backend import set_session
 from keras.callbacks import ModelCheckpoint, CSVLogger, LearningRateScheduler, ReduceLROnPlateau, EarlyStopping
 from keras.models import load_model
 
-from unet3d.metrics import (dice_coefficient, dice_coefficient_loss, dice_coef, dice_coef_loss,
+# from unet3d.metrics import (dice_coefficient, dice_coefficient_loss, dice_coef, dice_coef_loss,
+#                             weighted_dice_coefficient_loss, weighted_dice_coefficient)
+
+from metrics import (dice_coefficient, dice_coefficient_loss, dice_coef, dice_coef_loss,
                             weighted_dice_coefficient_loss, weighted_dice_coefficient)
 
 K.set_image_dim_ordering('th')
 
+config = tf.ConfigProto()
+config.gpu_options.per_process_gpu_memory_fraction = 0.9
+set_session(tf.Session(config=config))
 
 # learning rate schedule
 def step_decay(epoch, initial_lrate, drop, epochs_drop):
@@ -81,8 +89,8 @@ def train_model(model, model_file, training_generator, validation_generator, ste
                         validation_data=validation_generator,
                         validation_steps=validation_steps,
                         callbacks=get_callbacks(model_file,
-                                                initial_learning_rate=initial_learning_rate,
-                                                learning_rate_drop=learning_rate_drop,
-                                                learning_rate_epochs=learning_rate_epochs,
-                                                learning_rate_patience=learning_rate_patience,
-                                                early_stopping_patience=early_stopping_patience))
+                        initial_learning_rate=initial_learning_rate,
+                        learning_rate_drop=learning_rate_drop,
+                        learning_rate_epochs=learning_rate_epochs,
+                        learning_rate_patience=learning_rate_patience,
+                        early_stopping_patience=early_stopping_patience))
