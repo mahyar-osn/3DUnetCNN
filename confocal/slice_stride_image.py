@@ -39,8 +39,6 @@ def save_images(transformed, save_dir):
             path = os.path.join(save_dir, dir_name)
             if not os.path.exists(path):
                 os.mkdir(path)
-            #nib.save(j, os.path.join(path, str(i + 1) + '.nii.gz'))
-            #nib.save(j, os.path.join(path, '53_2nd_label' + '.nii.gz'))
             nib.save(j, os.path.join(path, '53_2nd_Ori_SBack_C3' + '.nii.gz'))
             k+=1
             # tifffile.imsave(os.path.join(path, str(i + 1) + '.tiff'), j)
