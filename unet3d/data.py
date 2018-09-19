@@ -1,7 +1,6 @@
 import os
-
-import numpy as np
 import tables
+import numpy as np
 
 # from .normalize import normalize_data_storage, reslice_image_set
 from normalize import normalize_data_storage, reslice_image_set
