@@ -8,23 +8,12 @@ matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
 
-# def get_whole_tumor_mask(data):
-#     return data > 0
-
 def get_membrane_mask(data):
     return data == 1
-
-# def get_tumor_core_mask(data):
-#     return np.logical_or(data == 1, data == 4)
 
 
 def get_cell_mask(data):
     return data == 3
-
-# def get_enhancing_tumor_mask(data):
-#     return data == 4
-# def get_cell_mask(data):
-#     return data == 2
 
 
 def dice_coefficient(truth, prediction):
